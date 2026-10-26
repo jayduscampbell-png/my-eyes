@@ -1,0 +1,23 @@
+name: Build Windows VST3
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64 -DCOPY_AFTER_BUILD=OFF
+
+      - name: Build
+        run: cmake --build build --config Release --target BoomBapDrums_VST3 --parallel
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: BoomBapDrums-VST3-Windows
+          path: build/BoomBapDrums_artefacts/Release/VST3/Boom Bap Drums.vst3
